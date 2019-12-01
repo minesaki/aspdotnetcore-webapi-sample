@@ -61,6 +61,20 @@ namespace webapi_sample
             {
                 option.ShutdownTimeout = System.TimeSpan.FromSeconds(20);
             });
+            // HTTPクライアントを使用する場合
+            services.AddHttpClient();
+            // 名前付きHTTPクライアントを使用する場合
+            services.AddHttpClient("weather", c =>
+            {
+                c.BaseAddress = new Uri("http://weather.livedoor.com/forecast/webservice/json/v1?city=270000");
+            });
+            // 型指定されたHTTPクライアントを使用する場合
+            services.AddHttpClient<GitHubService>(c =>
+            {
+                c.BaseAddress = new Uri("https://api.github.com/");
+                c.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+                c.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
+            });
 
             // 自作のサービス
             // MyStringUtilサービス（詳細はAddStringUtilメソッドを参照）
@@ -72,6 +86,13 @@ namespace webapi_sample
             // 関連する設定値をグループ化する。DIで受け取って使用する。
             // https://docs.microsoft.com/ja-jp/aspnet/core/fundamentals/configuration/options?view=aspnetcore-3.1
             services.Configure<MyOptions>(Configuration);
+
+            // カスタムルート制約
+            // ルーティングのパラメータを検査する独自のルールを指定する
+            services.AddRouting(options =>
+            {
+                options.ConstraintMap.Add("myGender", typeof(GenderConstraint));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
