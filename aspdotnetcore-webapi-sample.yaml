@@ -1,0 +1,35 @@
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-aspdotnetcore-webapi-sample
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-aspdotnetcore-webapi-sample
+  template:
+    metadata:
+      labels:
+        app: app-aspdotnetcore-webapi-sample
+    spec:
+      containers:
+      - name: app-aspdotnetcore-webapi-sample
+        image: aspdotnetcore-webapi-sample:1.0.0
+        ports:
+        - containerPort: 80
+
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-aspdotnetcore-webapi-sample
+spec:
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 80
+    nodePort: 30000
+  selector:
+    app: app-aspdotnetcore-webapi-sample
