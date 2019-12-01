@@ -1,6 +1,6 @@
 using System;
 
-namespace webapi_sample
+namespace webapi_sample.models
 {
     public class WeatherForecast
     {

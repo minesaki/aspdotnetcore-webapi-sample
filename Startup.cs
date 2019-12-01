@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using webapi_sample.filters;
+using webapi_sample.models;
 
 namespace webapi_sample
 {
@@ -67,6 +68,10 @@ namespace webapi_sample
             // 自作のフィルタを登録（ヘルパーメソッドを作らず、ここで直接登録する場合）
             services.AddTransient<IStartupFilter, OutputRequestUrlFilter>();
 
+            // オプション
+            // 関連する設定値をグループ化する。DIで受け取って使用する。
+            // https://docs.microsoft.com/ja-jp/aspnet/core/fundamentals/configuration/options?view=aspnetcore-3.1
+            services.Configure<MyOptions>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -95,6 +100,16 @@ namespace webapi_sample
                 // Exceptionが発生したら詳細なエラーページを返す
                 app.UseDeveloperExceptionPage();
             }
+            // その他の環境の判定
+            // 環境変数 ASPNETCORE_ENVIRONMENT に基づく判定ができる
+            // デバッグ時の値は launchSettings.json で変更可能
+            // （注）dotnet runでアプリを起動した場合、.vscode/launch.jsonは読み込まれない。
+            string envMode =
+              env.IsProduction() || env.IsStaging() || env.IsEnvironment("UAT") ? "Production"
+              : env.IsDevelopment() ? "Development"
+              : "Unknown";
+            System.Console.WriteLine($"[Startup][Configure] Application is running in {envMode} Mode");
+
             // HTTPのアクセスをHTTPSにリダイレクトする場合
             // app.UseHttpsRedirection();
 
