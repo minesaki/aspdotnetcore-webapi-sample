@@ -55,6 +55,9 @@ namespace WebApiSample
         {
             // 組み込みのサービス
             // https://docs.microsoft.com/ja-jp/aspnet/core/fundamentals/middleware/?view=aspnetcore-3.1#built-in-middleware
+            // Application Insights
+            // dotnet add package Microsoft.ApplicationInsights.AspNetCore --version 2.8.2
+            services.AddApplicationInsightsTelemetry();
             // Controllerサービス（MVC機能：ビューやページの処理を含まない）
             services.AddControllers();
             // 圧縮サービス（BrotliとGzipをサポート。Brotliが優先される）
