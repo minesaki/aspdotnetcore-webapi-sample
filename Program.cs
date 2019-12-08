@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace webapi_sample
+namespace WebApiSample
 {
     public class Program
     {
@@ -44,7 +44,8 @@ namespace webapi_sample
                 // ログプロバイダを構成する
                 // 組み込みのログプロバイダ： https://docs.microsoft.com/ja-jp/aspnet/core/fundamentals/logging/?view=aspnetcore-3.1#built-in-logging-providers
                 // サードパーティのログプロバイダ： https://docs.microsoft.com/ja-jp/aspnet/core/fundamentals/logging/?view=aspnetcore-3.1#third-party-logging-providers
-                .ConfigureLogging(logging=>{
+                .ConfigureLogging(logging =>
+                {
                     // CreateDefaultBuilderにより「コンソール」「デバッグ」「EventSource」「イベントログ（Windowsのみ）」が追加されている
                     logging.ClearProviders();
                     logging.AddConsole();
@@ -54,7 +55,8 @@ namespace webapi_sample
                 })
                 // ホストビルダーの構成を指定する場合は使用する
                 // IHostEnvironment/IWebHostEnvironmentを初期化するために使用される
-                .ConfigureHostConfiguration(config => {
+                .ConfigureHostConfiguration(config =>
+                {
                     // ほとんどの設定はConfigureAppConfigurationで実施可能
                     // ここでしか設定できないものは、下記のようなものが考えられる（未確認）
                     // ・アプリ名
@@ -77,14 +79,14 @@ namespace webapi_sample
 
                     // ディレクトリのファイル群からキー/値のペア群を生成
                     // config.AddKeyPerFile(directoryPath: path, optional: true);
-                    
+
                     // コマンドライン引数でアプリ構成をオーバーライドできるようにする
                     // 例： ※下記のスタイルを混在させないこと
                     //  dotnet run key1=value1
                     //  dotnet run --key1=value1    ※ -- の代わりに / でも可
                     //  dotnet run --key1 value1    ※ -- の代わりに / でも可
                     config.AddCommandLine(args);
-                    
+
                     // メモリ（オブジェクト）から構成を追加する
                     config.AddInMemoryCollection(new Dictionary<string, string>
                     {

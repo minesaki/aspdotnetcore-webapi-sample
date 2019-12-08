@@ -5,12 +5,13 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using webapi_sample.models;
+using WebApiSample.Applications.Models;
+using WebApiSample.Infrastructure.Options;
+using WebApiSample.Infrastructure.Services;
 
-namespace webapi_sample.Controllers
+namespace WebApiSample.Applications.Controllers
 {
     [ApiController]
     [Route("[controller]")]

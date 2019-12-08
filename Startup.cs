@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using webapi_sample.filters;
-using webapi_sample.models;
+using WebApiSample.Infrastructure.Options;
+using WebApiSample.Infrastructure.Constraits;
+using WebApiSample.Infrastructure.Handlers;
+using WebApiSample.Infrastructure.Services;
+using WebApiSample.Infrastructure.Filters;
 
-namespace webapi_sample
+namespace WebApiSample
 {
     /// <summary>
     /// アプリケーション全体の初期化処理を記述します。
@@ -63,18 +66,26 @@ namespace webapi_sample
             });
             // HTTPクライアントを使用する場合
             services.AddHttpClient();
-            // 名前付きHTTPクライアントを使用する場合
+            // 名前付きHTTPクライアントを使用する場合＋送信要求ミドルウェアを使う例
+            services.AddTransient<ValidateHeaderHandler>();
             services.AddHttpClient("weather", c =>
             {
                 c.BaseAddress = new Uri("http://weather.livedoor.com/forecast/webservice/json/v1?city=270000");
-            });
+            })
+            // HTTPリクエストの前後に処理を挟む例（キャッシュ、エラー処理、シリアル化、ロギングなど）
+            // 複数のミドルウェアと登録することも可能。登録順にリクエストを処理し、登録と逆順にレスポンスを処理する。
+            // Polly（CircuitBreakerなどをサポートする3rdライブラリ）のポリシーもAddHttpMessageHandlerと同様に登録できる。
+            // https://docs.microsoft.com/ja-jp/aspnet/core/fundamentals/http-requests?view=aspnetcore-3.1#use-polly-based-handlers
+            .AddHttpMessageHandler<ValidateHeaderHandler>();
             // 型指定されたHTTPクライアントを使用する場合
             services.AddHttpClient<GitHubService>(c =>
             {
                 c.BaseAddress = new Uri("https://api.github.com/");
                 c.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
                 c.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
-            });
+            })
+            // 名前付きクライアントごとに生成されるHttpMessageHandlerの有効期間を変更する場合（既定は2分）
+            .SetHandlerLifetime(TimeSpan.FromMinutes(5));
 
             // 自作のサービス
             // MyStringUtilサービス（詳細はAddStringUtilメソッドを参照）

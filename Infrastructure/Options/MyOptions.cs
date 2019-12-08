@@ -1,4 +1,4 @@
-namespace webapi_sample.models
+namespace WebApiSample.Infrastructure.Options
 {
     public class MyOptions
     {

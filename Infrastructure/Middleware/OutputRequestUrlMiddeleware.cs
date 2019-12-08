@@ -1,40 +1,14 @@
-using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using webapi_sample.services;
+using WebApiSample.Infrastructure.Services;
 
-namespace webapi_sample.filters
+namespace WebApiSample.Infrastructure.Middleware
 {
-    /*
-     * 自作のミドルウェア・フィルタの例
-     * ※クラスやソースファイル、配置するディレクトリの構成がこれで良いか不明・・・
-     */
-
-    /// <summary>
-    /// 自作フィルタの例
-    /// 自作ミドルウェア OutputRequestUrlMiddeleware を構成します。
-    /// </summary>
-    public class OutputRequestUrlFilter : IStartupFilter
-    {
-        public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
-        {
-            return builder =>
-            {
-                builder.UseMiddleware<OutputRequestUrlMiddeleware>("before");
-                next(builder);
-                // ここに書いても機能しない
-                // builder.UseMiddleware<OutputRequestUrlMiddeleware>("after");
-            };
-        }
-    }
-
     public class OutputRequestUrlMiddeleware
     {
         private readonly RequestDelegate _next;
         private readonly string title;
-        private readonly IMyStringUtil stringUtil;
+        private readonly IMyStringService stringUtil;
 
         /// <summary>
         /// OutputRequestUrlMiddelewareコンストラクタ
@@ -45,7 +19,7 @@ namespace webapi_sample.filters
         /// <param name="next"></param>
         /// <param name="stringUtil"></param>
         /// <param name="title"></param>
-        public OutputRequestUrlMiddeleware(RequestDelegate next, IMyStringUtil stringUtil, string title)
+        public OutputRequestUrlMiddeleware(RequestDelegate next, IMyStringService stringUtil, string title)
         {
             _next = next;
             this.stringUtil = stringUtil;

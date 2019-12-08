@@ -1,22 +1,4 @@
-
-using webapi_sample.services;
-
-namespace webapi_sample.services
-{
-    public interface IMyStringUtil
-    {
-        bool IsEmpty(string str);
-    }
-
-    public class MyStringUtil : IMyStringUtil
-    {
-        public bool IsEmpty(string str)
-        {
-            System.Console.WriteLine("[StringUtil.IsEmpty]");
-            return string.IsNullOrWhiteSpace(str);
-        }
-    }
-}
+using WebApiSample.Infrastructure.Services;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -38,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
             // シングルトンとして生成する場合
             // ※シングルトンからScopedなサービスを参照するのはNG（後続のサービスが不正な状態になる可能性があるため）
             // ※ファクトリメソッド（実装クラスのコンストラクタ）をスレッドセーフにする必要はない
-            services.AddSingleton<IMyStringUtil, MyStringUtil>();
+            services.AddSingleton<IMyStringService, MyStringService>();
 
             // 接続ごとに生成する場合
             // services.AddScoped<IMyStringUtil,MyStringUtil>();

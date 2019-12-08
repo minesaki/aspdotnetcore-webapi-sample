@@ -1,0 +1,27 @@
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace WebApiSample.Infrastructure.Handlers
+{
+    // 送信要求ミドルウェアの実装例
+    public class ValidateHeaderHandler : DelegatingHandler
+    {
+        protected override async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            // HTTPリクエストヘッダにX-API-KEYが含まれていることを確認する例
+            if (!request.Headers.Contains("X-API-KEY"))
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("You must supply an API key header called X-API-KEY")
+                };
+            }
+
+            return await base.SendAsync(request, cancellationToken);
+        }
+    }
+}

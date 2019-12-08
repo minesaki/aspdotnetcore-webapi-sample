@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <RootNamespace>webapi_sample</RootNamespace>
+    <RootNamespace>WebApiSample</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
