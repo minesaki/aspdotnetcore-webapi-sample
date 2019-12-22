@@ -89,6 +89,13 @@ namespace WebApiSample
             })
             // 名前付きクライアントごとに生成されるHttpMessageHandlerの有効期間を変更する場合（既定は2分）
             .SetHandlerLifetime(TimeSpan.FromMinutes(5));
+            // CORSを使う場合、Configure内でUseCorsメソッドに指定するポリシーをここで事前定義することが可能
+            // services.AddCors(options =>
+            // {
+            //     options.AddPolicy("MyCorsPolicy",
+            //         builder => builder.WithOrigins("http://example.com", "http://www.contoso.com")
+            //     );
+            // });
 
             // 自作のサービス
             // MyStringUtilサービス（詳細はAddStringUtilメソッドを参照）
@@ -152,7 +159,8 @@ namespace WebApiSample
             app.UseRouting();
 
             // 認証・認可・CORSはルーティングの結果が必要なので、UseRoutingの後に書く
-            // app.UseCors();
+            // // CORSを使用する場合、ポリシーをここでインライン定義するか、ConfigureServicesで定義しておいたポリシー名を指定する
+            // app.UseCors("MyCorsPolicy");
             // app.UseAuthentication();
             // app.UseAuthorization();
 
